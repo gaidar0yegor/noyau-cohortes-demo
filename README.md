@@ -13,7 +13,7 @@ plutôt qu'un choix silencieux**.
 docker compose up
 ```
 
-Puis ouvrir <http://localhost:8099>.
+Puis ouvrir <http://localhost:8090>. (Le port d'écoute interne reste 8099 ; 8090 côté hôte évite les collisions.)
 
 Aucune carte graphique n'est nécessaire : le démonstrateur tourne en mode **règles** (traducteur
 déterministe + catalogue sémantique). Le mode « LLM » existe mais reste optionnel — il interroge un serveur
@@ -96,7 +96,7 @@ python3 - <<'PY'
 import json, urllib.request, pathlib
 bank = json.loads(pathlib.Path("questions/questions_medecins.json").read_text())
 for q in bank[:5]:
-    r = urllib.request.Request("http://localhost:8099/api/ask",
+    r = urllib.request.Request("http://localhost:8090/api/ask",
         data=json.dumps({"q": q["q"], "role": "chercheur", "mode": "regles"}).encode(),
         headers={"Content-Type": "application/json"})
     print(json.loads(urllib.request.urlopen(r).read())["statut"], q["q"][:60])
