@@ -1,0 +1,64 @@
+{
+ "gpu": "NVIDIA H100 80GB HBM3, 81559 MiB",
+ "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+ "max_model_len": 16384,
+ "ready_seconds": 245.1,
+ "slo": {
+  "itl_p95_ms": 100.0,
+  "ttft_p95_ms": 2000.0
+ },
+ "paliers": [
+  {
+   "concurrence": 8,
+   "erreurs": [],
+   "ttft_p50_ms": 259.9,
+   "ttft_p95_ms": 260.2,
+   "itl_p50_ms": 7.44,
+   "itl_p95_ms": 8.14,
+   "aggregate_tok_s": 798.9,
+   "requests_ok": 8,
+   "under_slo": true
+  },
+  {
+   "concurrence": 13,
+   "erreurs": [],
+   "ttft_p50_ms": 255.8,
+   "ttft_p95_ms": 273.3,
+   "itl_p50_ms": 10.97,
+   "itl_p95_ms": 12.47,
+   "aggregate_tok_s": 954.7,
+   "requests_ok": 13,
+   "under_slo": true
+  },
+  {
+   "concurrence": 17,
+   "erreurs": [],
+   "ttft_p50_ms": 291.4,
+   "ttft_p95_ms": 292.3,
+   "itl_p50_ms": 12.82,
+   "itl_p95_ms": 14.14,
+   "aggregate_tok_s": 1108.9,
+   "requests_ok": 17,
+   "under_slo": true
+  },
+  {
+   "concurrence": 24,
+   "erreurs": [],
+   "ttft_p50_ms": 282.2,
+   "ttft_p95_ms": 347.3,
+   "itl_p50_ms": 13.19,
+   "itl_p95_ms": 14.63,
+   "aggregate_tok_s": 1458.9,
+   "requests_ok": 24,
+   "under_slo": true
+  }
+ ],
+ "extraction": {
+  "documents": 200,
+  "valides": 0,
+  "secondes": 24.8,
+  "documents_par_heure": 28989.4,
+  "documents_valides_par_heure": 0.0,
+  "concurrence": 8
+ }
+}

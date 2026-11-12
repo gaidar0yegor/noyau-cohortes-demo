@@ -1,0 +1,23 @@
+{
+ "ready_seconds": 330.1,
+ "essais": [
+  {
+   "mode": "response_format",
+   "valides": 4,
+   "detail": null
+  }
+ ],
+ "mode_retenu": "response_format",
+ "mesure": {
+  "mode": "response_format",
+  "documents": 200,
+  "valides": 200,
+  "taux_validation": 100.0,
+  "secondes": 10.4,
+  "documents_par_heure": 69536.4,
+  "documents_valides_par_heure": 69536.4,
+  "concurrence": 8,
+  "erreurs": [],
+  "exemple_invalide": null
+ }
+}

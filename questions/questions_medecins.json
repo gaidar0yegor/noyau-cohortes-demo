@@ -1,0 +1,322 @@
+[
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Combien de patientes ont un cancer du sein confirmé entre 25 et 36 ans, sans grossesse antérieure ?",
+  "attendu": "S1",
+  "statut": "clarification",
+  "msg": "À la date du diagnostic : 29 patientes. Âge aujourd'hui : 16. Laquelle des deux références ?"
+ },
+ {
+  "n": 408,
+  "profil": "Oncologue",
+  "q": "Quel est l'âge moyen des patientes prises en charge pour cancer du sein ?",
+  "attendu": "S1",
+  "statut": "verifie",
+  "msg": "Âge moyen : 56,1 ans, calculé sur 404 patientes — 4 sans année de naissance connue sont exclues du calcul, pas comptées "
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Combien de patientes de plus de 70 ans ont un cancer du sein confirmé ?",
+  "attendu": "S1",
+  "statut": "clarification",
+  "msg": "À la date du diagnostic : 102 patientes. Âge aujourd'hui : 117. Laquelle des deux références ?"
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Combien de patientes ont eu une récidive documentée ?",
+  "attendu": "S1",
+  "statut": "refus",
+  "msg": "Je ne réponds pas : « recidive » n'existe pas dans la couche sémantique. Une définition ne s'invente pas — elle s'écrit "
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Quelle est la répartition par service des patientes avec cancer du sein ?",
+  "attendu": "S1",
+  "statut": "clarification",
+  "msg": "Faut-il exiger la validation anatomopathologique ? Les deux définitions existent dans le catalogue, et le chiffre change"
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Combien de patientes ont un cancer du sein ET une autre tumeur maligne ?",
+  "attendu": "S1",
+  "statut": "clarification",
+  "msg": "Faut-il exiger la validation anatomopathologique ? Les deux définitions existent dans le catalogue, et le chiffre change"
+ },
+ {
+  "n": 1012,
+  "profil": "Oncologue",
+  "q": "Combien de patientes ont été hospitalisées dans les 12 derniers mois ?",
+  "attendu": "S1",
+  "statut": "verifie",
+  "msg": "1012 patientes correspondent à la définition."
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Quelle est la durée moyenne de séjour pour cancer du sein ?",
+  "attendu": "S1",
+  "statut": "clarification",
+  "msg": "Faut-il exiger la validation anatomopathologique ? Les deux définitions existent dans le catalogue, et le chiffre change"
+ },
+ {
+  "n": 408,
+  "profil": "Épidémiologiste",
+  "q": "Combien de patientes expriment le gène X parmi celles avec cancer du sein confirmé ?",
+  "attendu": "S1",
+  "statut": "verifie",
+  "msg": "68 patientes sur 408 expriment le gène X (17 %), contre 35 % attendus dans la cohorte de référence. p < 0,001 — n = 408 "
+ },
+ {
+  "n": null,
+  "profil": "Épidémiologiste",
+  "q": "Quelle est la fréquence du gène X chez les moins de 40 ans ?",
+  "attendu": "S1",
+  "statut": "clarification",
+  "msg": "À la date du diagnostic : 36 patientes. Âge aujourd'hui : 143. Laquelle des deux références ?"
+ },
+ {
+  "n": null,
+  "profil": "Épidémiologiste",
+  "q": "Combien de patientes ont eu une grossesse après 35 ans ?",
+  "attendu": "S1",
+  "statut": "refus",
+  "msg": "Je ne réponds pas : « âge au moment de la grossesse » n'existe pas dans la couche sémantique. Une définition ne s'invent"
+ },
+ {
+  "n": null,
+  "profil": "Épidémiologiste",
+  "q": "Quelle est la distribution des âges au diagnostic par décennie ?",
+  "attendu": "S1",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "Épidémiologiste",
+  "q": "Combien de nouveaux cas par trimestre sur deux ans ?",
+  "attendu": "S1",
+  "statut": "refus",
+  "msg": "Votre question ne contient aucun critère que je sache traduire. Répondre « toutes les patientes » serait un chiffre vrai"
+ },
+ {
+  "n": null,
+  "profil": "Épidémiologiste",
+  "q": "Y a-t-il une différence de fréquence du gène X entre les services ?",
+  "attendu": "S3",
+  "statut": "refus",
+  "msg": "Je ne réponds pas : « t », « il », « difference » n'existe pas dans la couche sémantique. Une définition ne s'invente pa"
+ },
+ {
+  "n": 287,
+  "profil": "ARC",
+  "q": "Combien de patientes sont éligibles à l'essai (cancer confirmé, 18–75 ans, sans autre tumeur) ?",
+  "attendu": "S1",
+  "statut": "verifie",
+  "msg": "287 patientes correspondent à la définition."
+ },
+ {
+  "n": null,
+  "profil": "ARC",
+  "q": "Combien de patientes ont un diagnostic validé par anatomopathologie ?",
+  "attendu": "S1",
+  "statut": "refus",
+  "msg": "Je ne réponds pas : « anatomopathologie » n'existe pas dans la couche sémantique. Une définition ne s'invente pas — elle"
+ },
+ {
+  "n": null,
+  "profil": "ARC",
+  "q": "Quelles patientes ont un diagnostic non validé, et pourquoi ?",
+  "attendu": "S2",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "Data manager",
+  "q": "Combien d'enregistrements ont une date de diagnostic manquante ?",
+  "attendu": "S1",
+  "statut": "refus",
+  "msg": "Votre question ne contient aucun critère que je sache traduire. Répondre « toutes les patientes » serait un chiffre vrai"
+ },
+ {
+  "n": null,
+  "profil": "Data manager",
+  "q": "Quels services ont le plus de séjours sans motif renseigné ?",
+  "attendu": "S1",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "Data manager",
+  "q": "Combien de patientes ont plus d'un séjour le même jour ?",
+  "attendu": "S1",
+  "statut": "refus",
+  "msg": "Votre question ne contient aucun critère que je sache traduire. Répondre « toutes les patientes » serait un chiffre vrai"
+ },
+ {
+  "n": 1285,
+  "profil": "Cadre / direction",
+  "q": "Combien de patientes suivies par an, tous cancers confondus ?",
+  "attendu": "S1",
+  "statut": "verifie",
+  "msg": "1285 patientes correspondent à la définition."
+ },
+ {
+  "n": null,
+  "profil": "Cadre / direction",
+  "q": "Quelle est la file d'attente moyenne entre entrée et diagnostic ?",
+  "attendu": "S1",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Que disent les comptes rendus des patientes de moins de 30 ans sur le traitement reçu ?",
+  "attendu": "S2",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Résume les cas où la décision de chimiothérapie néo-adjuvante a été discutée en RCP.",
+  "attendu": "S2",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Quels protocoles sont cités dans les dossiers pour les patientes surexprimant HER2 ?",
+  "attendu": "S2",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "ARC",
+  "q": "Quelles sont les critères d'inclusion réellement appliqués dans l'essai précédent ?",
+  "attendu": "S2",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "Data manager",
+  "q": "Quelles définitions utilise-t-on aujourd'hui pour « patiente active » ?",
+  "attendu": "S2",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "Cadre / direction",
+  "q": "Quelles recommandations internes existent sur la prise en charge des femmes enceintes ?",
+  "attendu": "S2",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "Épidémiologiste",
+  "q": "Combien de patientes du service C ont un cancer du sein, et que disent leurs dossiers sur les antécédents familiaux ?",
+  "attendu": "S3",
+  "statut": "clarification",
+  "msg": "Faut-il exiger la validation anatomopathologique ? Les deux définitions existent dans le catalogue, et le chiffre change"
+ },
+ {
+  "n": null,
+  "profil": "Épidémiologiste",
+  "q": "Pour les 16 patientes de la cohorte, quelles anomalies biologiques reviennent ?",
+  "attendu": "S3",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "ARC",
+  "q": "Liste les patientes éligibles et les comptes rendus qui documentent chaque critère.",
+  "attendu": "S3",
+  "statut": "refus",
+  "msg": "Je ne sors pas de noms : votre rôle donne accès aux effectifs, pas aux identités. C'est la politique d'accès, elle ne dé"
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Quel est le pronostic de cette patiente ?",
+  "attendu": "R",
+  "statut": "refus",
+  "msg": "Avis médical : hors périmètre. Je compte des cohortes ; je ne dis pas ce qu'il faut faire pour une patiente. La décision"
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Faut-il opérer madame X ?",
+  "attendu": "R",
+  "statut": "refus",
+  "msg": "Avis médical : hors périmètre. Je compte des cohortes ; je ne dis pas ce qu'il faut faire pour une patiente. La décision"
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Donne-moi le nom et le téléphone des patientes de la cohorte.",
+  "attendu": "R",
+  "statut": "refus",
+  "msg": "Je ne sors pas de noms : votre rôle donne accès aux effectifs, pas aux identités. C'est la politique d'accès, elle ne dé"
+ },
+ {
+  "n": null,
+  "profil": "Cadre / direction",
+  "q": "Combien de patientes dans l'hôpital voisin ?",
+  "attendu": "R",
+  "statut": "refus",
+  "msg": "Je ne réponds pas : « hopital », « voisin » n'existe pas dans la couche sémantique. Une définition ne s'invente pas — el"
+ },
+ {
+  "n": null,
+  "profil": "Data manager",
+  "q": "Combien de patientes ont un cancer du poumon ?",
+  "attendu": "R",
+  "statut": "refus",
+  "msg": "Je ne réponds pas : « localisation tumorale précise », « poumon » n'existe pas dans la couche sémantique. Une définition"
+ },
+ {
+  "n": null,
+  "profil": "Épidémiologiste",
+  "q": "Combien de patientes ont une allergie aux arachides ?",
+  "attendu": "R",
+  "statut": "refus",
+  "msg": "Je ne réponds pas : « allergie », « arachides » n'existe pas dans la couche sémantique. Une définition ne s'invente pas "
+ },
+ {
+  "n": null,
+  "profil": "Oncologue",
+  "q": "Combien de patientes de moins de 20 ans ont un cancer du sein confirmé ?",
+  "attendu": "R",
+  "statut": "clarification",
+  "msg": "À la date du diagnostic : 23 patientes. Âge aujourd'hui : 0. Laquelle des deux références ?"
+ },
+ {
+  "n": null,
+  "profil": "Data manager",
+  "q": "Quel est le taux de survie à 5 ans de la cohorte ?",
+  "attendu": "R",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ },
+ {
+  "n": null,
+  "profil": "Cadre / direction",
+  "q": "Peux-tu me rédiger le rapport d'activité annuel ?",
+  "attendu": "R",
+  "statut": "refus",
+  "msg": "Je n'ai pas compris ce qu'il faut compter. Dites-le en clair : un nombre de patientes, un âge moyen, ou un croisement en"
+ }
+]

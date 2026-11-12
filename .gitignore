@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+journal.jsonl
+.DS_Store
+.env
+*.log

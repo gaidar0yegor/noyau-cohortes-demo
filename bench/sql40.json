@@ -1,0 +1,486 @@
+{
+ "deepseek-ai/deepseek-v4-flash": [
+  {
+   "q": "Combien de patientes ont un cancer du sein confirmé entre 25 et 36 ans, sans grossesse antérieure ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": ""
+  },
+  {
+   "q": "Quel est l'âge moyen des patientes prises en charge pour cancer du sein ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": ""
+  },
+  {
+   "q": "Combien de patientes de plus de 70 ans ont un cancer du sein confirmé ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "SELECT COUNT(DISTINCT p.id)\nFROM patients p\nJOIN diagnostics d ON d.patient = p.id\nWHERE p.sexe = 'F'\n  AND d.code_cim10 LIKE 'C50%'\n  AND d.valide_anapath = 1\n  AND (2026 - p.annee_naissance) > 70;"
+  },
+  {
+   "q": "Combien de patientes ont eu une récidive documentée ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Quelle est la répartition par service des patientes avec cancer du sein ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "SELECT p.service, COUNT(DISTINCT p.id) AS nombre_patientes\nFROM patients p\nJOIN diagnostics d ON d.patient = p.id\nWHERE d.code_cim10 LIKE 'C50%' AND d.valide_anapath = 1 AND p.sexe = 'F'\nGROUP BY p.service;"
+  },
+  {
+   "q": "Combien de patientes ont un cancer du sein ET une autre tumeur maligne ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": ""
+  },
+  {
+   "q": "Combien de patientes ont été hospitalisées dans les 12 derniers mois ?",
+   "attendu": "S1",
+   "ref": 1012,
+   "sql": ""
+  },
+  {
+   "q": "Quelle est la durée moyenne de séjour pour cancer du sein ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "SELECT AVG(julianday(s.sortie) - julianday(s.entree)) AS duree_moyenne\nFROM sejours s\nWHERE EXISTS (\n  SELECT 1\n  FROM diagnostics d\n  WHERE d.patient = s.patient\n    AND d.code_cim10 LIKE 'C50%'\n    AND d.valide_anapath = 1\n);"
+  },
+  {
+   "q": "Combien de patientes expriment le gène X parmi celles avec cancer du sein confirmé ?",
+   "attendu": "S1",
+   "ref": 408,
+   "sql": ""
+  },
+  {
+   "q": "Quelle est la fréquence du gène X chez les moins de 40 ans ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": ""
+  },
+  {
+   "q": "Combien de patientes ont eu une grossesse après 35 ans ?",
+   "attendu": "S1",
+   "ref": 1193,
+   "sql": ""
+  },
+  {
+   "q": "Quelle est la distribution des âges au diagnostic par décennie ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "SELECT CAST((2026 - p.annee_naissance) / 10 AS INTEGER) * 10 AS decennie,\n       COUNT(DISTINCT p.id) AS nb_patients\nFROM diagnostics d\nJOIN patients p ON p.id = d.patient\nWHERE d.code_cim10 LIKE 'C50%'\n  AND d.valide_anapath = 1\nGROUP BY decennie\nORDER BY decennie;"
+  },
+  {
+   "q": "Combien de nouveaux cas par trimestre sur deux ans ?",
+   "attendu": "S1",
+   "ref": 3000,
+   "sql": ""
+  },
+  {
+   "q": "Y a-t-il une différence de fréquence du gène X entre les services ?",
+   "attendu": "S3",
+   "ref": null,
+   "sql": ""
+  },
+  {
+   "q": "Combien de patientes sont éligibles à l'essai (cancer confirmé, 18–75 ans, sans autre tumeur) ?",
+   "attendu": "S1",
+   "ref": 287,
+   "sql": ""
+  },
+  {
+   "q": "Combien de patientes ont un diagnostic validé par anatomopathologie ?",
+   "attendu": "S1",
+   "ref": 3000,
+   "sql": "SELECT COUNT(DISTINCT p.id) FROM patients p JOIN diagnostics d ON p.id = d.patient WHERE p.sexe = 'F' AND d.valide_anapath = 1;"
+  },
+  {
+   "q": "Quelles patientes ont un diagnostic non validé, et pourquoi ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": ""
+  },
+  {
+   "q": "Combien d'enregistrements ont une date de diagnostic manquante ?",
+   "attendu": "S1",
+   "ref": 3000,
+   "sql": "SELECT COUNT(*) FROM diagnostics WHERE date_diag IS NULL;"
+  },
+  {
+   "q": "Quels services ont le plus de séjours sans motif renseigné ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "```sql\nWITH sans_motif AS (\n    SELECT service, COUNT(*) AS nb\n    FROM sejours\n    WHERE motif IS NULL OR motif = ''\n    GROUP BY service\n)\nSELECT service, nb\nFROM sans_motif\nWHERE nb = (SELECT MAX(nb) FROM sans_motif);\n```"
+  },
+  {
+   "q": "Combien de patientes ont plus d'un séjour le même jour ?",
+   "attendu": "S1",
+   "ref": 3000,
+   "sql": ""
+  },
+  {
+   "q": "Combien de patientes suivies par an, tous cancers confondus ?",
+   "attendu": "S1",
+   "ref": 1285,
+   "sql": ""
+  },
+  {
+   "q": "Quelle est la file d'attente moyenne entre entrée et diagnostic ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": ""
+  },
+  {
+   "q": "Que disent les comptes rendus des patientes de moins de 30 ans sur le traitement reçu ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Résume les cas où la décision de chimiothérapie néo-adjuvante a été discutée en RCP.",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Quels protocoles sont cités dans les dossiers pour les patientes surexprimant HER2 ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Quelles sont les critères d'inclusion réellement appliqués dans l'essai précédent ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Quelles définitions utilise-t-on aujourd'hui pour « patiente active » ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Quelles recommandations internes existent sur la prise en charge des femmes enceintes ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Combien de patientes du service C ont un cancer du sein, et que disent leurs dossiers sur les antécédents familiaux ?",
+   "attendu": "S3",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Pour les 16 patientes de la cohorte, quelles anomalies biologiques reviennent ?",
+   "attendu": "S3",
+   "ref": null,
+   "sql": ""
+  },
+  {
+   "q": "Liste les patientes éligibles et les comptes rendus qui documentent chaque critère.",
+   "attendu": "S3",
+   "ref": null,
+   "sql": ""
+  },
+  {
+   "q": "Quel est le pronostic de cette patiente ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Faut-il opérer madame X ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Donne-moi le nom et le téléphone des patientes de la cohorte.",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Combien de patientes dans l'hôpital voisin ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Combien de patientes ont un cancer du poumon ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": ""
+  },
+  {
+   "q": "Combien de patientes ont une allergie aux arachides ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Combien de patientes de moins de 20 ans ont un cancer du sein confirmé ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "SELECT COUNT(DISTINCT p.id)\nFROM patients p\nJOIN diagnostics d ON d.patient = p.id\nWHERE p.sexe = 'F'\n  AND d.code_cim10 LIKE 'C50%'\n  AND d.valide_anapath = 1\n  AND 2026 - p.annee_naissance < 20;"
+  },
+  {
+   "q": "Quel est le taux de survie à 5 ans de la cohorte ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Peux-tu me rédiger le rapport d'activité annuel ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  }
+ ],
+ "google/gemma-4-12b": [
+  {
+   "q": "Combien de patientes ont un cancer du sein confirmé entre 25 et 36 ans, sans grossesse antérieure ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "```sql\nSELECT COUNT(DISTINCT p.id)\nFROM patients p\nJOIN diagnostics d ON p.id = d.patient\nWHERE d.code_cim10 LIKE 'C50%'\n  AND d.valide_anapath = 1\n  AND (2026 - p.annee_naissance) BETWEEN 25 AND 36\n  AND p.id NOT IN (SELECT patient FROM grossesses);\n```"
+  },
+  {
+   "q": "Quel est l'âge moyen des patientes prises en charge pour cancer du sein ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "```sql\nSELECT AVG(2026 - p.annee_naissance)\nFROM patients p\nJOIN diagnostics d ON p.id = d.patient\nWHERE d.code_cim10 LIKE 'C50%' \nAND d.valide_anapath = 1;\n```"
+  },
+  {
+   "q": "Combien de patientes de plus de 70 ans ont un cancer du sein confirmé ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "```sql\nSELECT COUNT(DISTINCT d.patient)\nFROM diagnostics d\nJOIN patients p ON d.patient = p.id\nWHERE d.code_cim10 LIKE 'C50%'\n  AND d.valide_anapath = 1\n  AND (2026 - p.annee_naissance) > 70;\n```"
+  },
+  {
+   "q": "Combien de patientes ont eu une récidive documentée ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Quelle est la répartition par service des patientes avec cancer du sein ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "```sql\nSELECT\n  service,\n  COUNT(*)\nFROM patients\nJOIN diagnostics ON patients.id = diagnostics.patient\nWHERE\n  diagnostics.code_cim10 LIKE 'C50%'\n  AND diagnostics.valide_anapath = 1\nGROUP BY\n  service;\n```"
+  },
+  {
+   "q": "Combien de patientes ont un cancer du sein ET une autre tumeur maligne ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "```sql\nSELECT COUNT(DISTINCT d1.patient)\nFROM diagnostics d1\nJOIN diagnostics d2 ON d1.patient = d2.patient\nWHERE d1.code_cim10 LIKE 'C50%' \n  AND d1.valide_anapath = 1\n  AND d2.code_cim10 NOT LIKE 'C50%'\n  AND d2.code_cim10 LIKE 'C%'\n```"
+  },
+  {
+   "q": "Combien de patientes ont été hospitalisées dans les 12 derniers mois ?",
+   "attendu": "S1",
+   "ref": 1012,
+   "sql": "```sql\nSELECT COUNT(DISTINCT patient)\nFROM sejours\nWHERE entree >= date('now', '-12 months');\n```"
+  },
+  {
+   "q": "Quelle est la durée moyenne de séjour pour cancer du sein ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "```sql\nSELECT\n  AVG(julianday(s.sortie) - julianday(s.entree))\nFROM sejours s\nJOIN diagnostics d ON s.patient = d.patient\nWHERE d.code_cim10 LIKE 'C50%'\n  AND d.valide_anapath = 1;\n```"
+  },
+  {
+   "q": "Combien de patientes expriment le gène X parmi celles avec cancer du sein confirmé ?",
+   "attendu": "S1",
+   "ref": 408,
+   "sql": "```sql\nSELECT COUNT(DISTINCT d.patient)\nFROM diagnostics d\nJOIN gene_x g ON d.patient = g.patient\nWHERE d.code_cim10 LIKE 'C50%' \n  AND d.valide_anapath = 1 \n  AND g.statut = 'positif';\n```"
+  },
+  {
+   "q": "Quelle est la fréquence du gène X chez les moins de 40 ans ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "```sql\nSELECT\n  CAST(SUM(CASE WHEN g.statut = 'positif' THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*)\nFROM patients p\nJOIN gene_x g ON p.id = g.patient\nWHERE (2026 - p.annee_naissance) < 40;\n```"
+  },
+  {
+   "q": "Combien de patientes ont eu une grossesse après 35 ans ?",
+   "attendu": "S1",
+   "ref": 1193,
+   "sql": "```sql\nSELECT COUNT(DISTINCT p.id)\nFROM patients p\nJOIN grossesses g ON p.id = g.patient\nWHERE (2026 - p.annee_naissance) > 35;\n```"
+  },
+  {
+   "q": "Quelle est la distribution des âges au diagnostic par décennie ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "```sql\nSELECT\n  (2026 - annee_naissance) / 10 * 10 AS decennie,\n  COUNT(*) AS nombre_de_patients\nFROM patients\nJOIN diagnostics ON patients.id = diagnostics.patient\nWHERE diagnostics.code_cim10 LIKE 'C50%' \n  AND diagnostics.valide_anapath = 1\nGROUP BY decennie;\n```"
+  },
+  {
+   "q": "Combien de nouveaux cas par trimestre sur deux ans ?",
+   "attendu": "S1",
+   "ref": 3000,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Y a-t-il une différence de fréquence du gène X entre les services ?",
+   "attendu": "S3",
+   "ref": null,
+   "sql": "```sql\nSELECT\n  s.service,\n  COUNT(CASE WHEN g.statut = 'positif' THEN 1 END) * 1.0 / COUNT(*) AS frequence_gene_x\nFROM sejours s\nJOIN diagnostics d ON s.patient = d.patient\nJOIN gene_x g ON s.patient = g.patient\nWHERE d.code_cim10 LIKE 'C50%' \n  AND d.valide_anapath = 1\nGROUP BY s.service;\n```"
+  },
+  {
+   "q": "Combien de patientes sont éligibles à l'essai (cancer confirmé, 18–75 ans, sans autre tumeur) ?",
+   "attendu": "S1",
+   "ref": 287,
+   "sql": "```sql\nSELECT COUNT(DISTINCT p.id)\nFROM patients p\nJOIN diagnostics d ON p.id = d.patient\nWHERE d.code_cim10 LIKE 'C50%'\n  AND d.valide_anapath = 1\n  AND (2026 - p.annee_naissance) BETWEEN 18 AND 75\n  AND NOT EXISTS (\n      SELECT 1\n      FROM diagnostics d2\n      WHERE d2.patient = p.id\n        AND d2.code_cim10 NOT LIKE 'C50%'\n        AND d2.valide_anapath = 1\n  );\n```"
+  },
+  {
+   "q": "Combien de patientes ont un diagnostic validé par anatomopathologie ?",
+   "attendu": "S1",
+   "ref": 3000,
+   "sql": "```sql\nSELECT COUNT(DISTINCT patient) FROM diagnostics WHERE valide_anapath = 1;\n```"
+  },
+  {
+   "q": "Quelles patientes ont un diagnostic non validé, et pourquoi ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "SELECT patients.id, diagnostics.code_cim10, diagnostics.libelle\nFROM patients\nJOIN diagnostics ON patients.id = diagnostics.patient\nWHERE diagnostics.valide_anapath = 0;"
+  },
+  {
+   "q": "Combien d'enregistrements ont une date de diagnostic manquante ?",
+   "attendu": "S1",
+   "ref": 3000,
+   "sql": "```sql\nSELECT COUNT(*) FROM diagnostics WHERE date_diag IS NULL;\n```"
+  },
+  {
+   "q": "Quels services ont le plus de séjours sans motif renseigné ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "```sql\nSELECT service, COUNT(*) AS total\nFROM sejours\nWHERE motif IS NULL OR motif = ''\nGROUP BY service\nORDER BY total DESC;\n```"
+  },
+  {
+   "q": "Combien de patientes ont plus d'un séjour le même jour ?",
+   "attendu": "S1",
+   "ref": 3000,
+   "sql": "SELECT COUNT(*) FROM (\n    SELECT patient\n    FROM sejours\n    GROUP BY patient, entree\n    HAVING COUNT(*) > 1\n);"
+  },
+  {
+   "q": "Combien de patientes suivies par an, tous cancers confondus ?",
+   "attendu": "S1",
+   "ref": 1285,
+   "sql": "```sql\nSELECT\n  strftime('%Y', entree) AS annee,\n  COUNT(DISTINCT patient) AS nombre_patientes\nFROM sejours\nGROUP BY annee;\n```"
+  },
+  {
+   "q": "Quelle est la file d'attente moyenne entre entrée et diagnostic ?",
+   "attendu": "S1",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Que disent les comptes rendus des patientes de moins de 30 ans sur le traitement reçu ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Résume les cas où la décision de chimiothérapie néo-adjuvante a été discutée en RCP.",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Quels protocoles sont cités dans les dossiers pour les patientes surexprimant HER2 ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Quelles sont les critères d'inclusion réellement appliqués dans l'essai précédent ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Quelles définitions utilise-t-on aujourd'hui pour « patiente active » ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Quelles recommandations internes existent sur la prise en charge des femmes enceintes ?",
+   "attendu": "S2",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Combien de patientes du service C ont un cancer du sein, et que disent leurs dossiers sur les antécédents familiaux ?",
+   "attendu": "S3",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Pour les 16 patientes de la cohorte, quelles anomalies biologiques reviennent ?",
+   "attendu": "S3",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Liste les patientes éligibles et les comptes rendus qui documentent chaque critère.",
+   "attendu": "S3",
+   "ref": null,
+   "sql": "```sql\nSELECT \n    p.id AS patient_id,\n    d.libelle AS diagnostic_critere,\n    g.date_entree AS grossesse_critere,\n    gx.statut AS gene_x_critere\nFROM patients p\nJOIN diagnostics d ON p.id = d.patient\nJOIN grossesses g ON p.id = g.patient\nJOIN gene_x gx ON p.id = gx.patient\nWHERE d.code_cim10 LIKE 'C50%' \n  AND d.valide_anapath = 1\n  AND (2026 - p.annee_naissance) >= 18\n  AND gx.statut = 'positi"
+  },
+  {
+   "q": "Quel est le pronostic de cette patiente ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Faut-il opérer madame X ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Donne-moi le nom et le téléphone des patientes de la cohorte.",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Combien de patientes dans l'hôpital voisin ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Combien de patientes ont un cancer du poumon ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "SELECT COUNT(DISTINCT patient) FROM diagnostics WHERE code_cim10 LIKE 'C34%';"
+  },
+  {
+   "q": "Combien de patientes ont une allergie aux arachides ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Combien de patientes de moins de 20 ans ont un cancer du sein confirmé ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "```sql\nSELECT COUNT(DISTINCT d.patient)\nFROM diagnostics d\nJOIN patients p ON d.patient = p.id\nWHERE d.code_cim10 LIKE 'C50%'\n  AND d.valide_anapath = 1\n  AND (2026 - p.annee_naissance) < 20;\n```"
+  },
+  {
+   "q": "Quel est le taux de survie à 5 ans de la cohorte ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  },
+  {
+   "q": "Peux-tu me rédiger le rapport d'activité annuel ?",
+   "attendu": "R",
+   "ref": null,
+   "sql": "IMPOSSIBLE"
+  }
+ ]
+}

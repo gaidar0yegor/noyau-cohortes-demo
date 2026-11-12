@@ -1,0 +1,109 @@
+version_catalogue: '2026-11-10'
+concepts:
+  cancer_du_sein_confirme:
+    libelle: 'Cancer du sein confirmé : code CIM-10 C50.* ET validation anatomopathologique'
+    version: v2
+    source: S1 · diagnostics
+    valide_par: Dr. — (à valider)
+    declencheurs:
+    - cancer du sein
+    - c50
+    - sein
+    sql: "EXISTS (SELECT 1 FROM diagnostics d\n        WHERE d.patient = p.id AND\
+      \ d.code_cim10 LIKE 'C50%' AND d.valide_anapath = 1)\n"
+  cancer_du_sein_toute_mention:
+    libelle: Toute mention de C50, sans exigence de confirmation anatomopathologique
+    version: v1
+    source: S1 · diagnostics
+    valide_par: Dr. — (à valider)
+    declencheurs:
+    - toute mention
+    - c50
+    sql: "EXISTS (SELECT 1 FROM diagnostics d\n        WHERE d.patient = p.id AND\
+      \ d.code_cim10 LIKE 'C50%')\n"
+  patiente_active:
+    libelle: 'Patiente active : séjour ouvert ou dernière sortie < 24 mois'
+    version: v3
+    source: S1 · sejours
+    valide_par: Dr. — (à valider)
+    declencheurs:
+    - active
+    - actives
+    - suivie
+    - suivies
+    - en cours
+    sql: "EXISTS (SELECT 1 FROM sejours s\n        WHERE s.patient = p.id\n      \
+      \    AND COALESCE(s.sortie, '9999-12-31') >= date('{today}', '-24 months'))\n"
+  grossesse_anterieure:
+    libelle: 'Grossesse antérieure : au moins une grossesse enregistrée'
+    version: v1
+    source: S1 · grossesses
+    valide_par: Dr. — (à valider)
+    declencheurs:
+    - grossesse
+    - enfant
+    - enfants
+    sql: 'EXISTS (SELECT 1 FROM grossesses g WHERE g.patient = p.id)
+
+      '
+  expression_gene_x:
+    libelle: 'Expression du gène X : prélèvement positif (''non_fait'' n''est pas
+      ''négatif'')'
+    version: v1
+    source: S1 · gene_x
+    valide_par: Dr. — (à valider)
+    declencheurs:
+    - gène x
+    - gene x
+    - expression
+    sql: 'EXISTS (SELECT 1 FROM gene_x gx WHERE gx.patient = p.id AND gx.statut =
+      ''positif'')
+
+      '
+  hospitalisation_recente:
+    libelle: Hospitalisation enregistrée dans les 24 derniers mois
+    version: v1
+    source: S1 · sejours
+    valide_par: Dr. — (à valider)
+    declencheurs:
+    - hospitalisation
+    - hospitalisée
+    - hospitalisee
+    - séjour
+    - sejour
+    sql: EXISTS (SELECT 1 FROM sejours s WHERE s.patient = p.id AND s.sortie >= date('{today}',
+      '-24 months'))
+  sejour_ouvert:
+    libelle: Séjour en cours (pas de date de sortie)
+    version: v1
+    source: S1 · sejours
+    valide_par: Dr. — (à valider)
+    declencheurs:
+    - en cours d'hospitalisation
+    - hospitalisée actuellement
+    - encore hospitalisée
+    sql: EXISTS (SELECT 1 FROM sejours s WHERE s.patient = p.id AND s.sortie IS NULL)
+  autre_tumeur_maligne:
+    libelle: Autre tumeur maligne (C34 poumon, C18 côlon, hors C50)
+    version: v1
+    source: S1 · diagnostics
+    valide_par: Dr. — (à valider)
+    declencheurs:
+    - autre tumeur
+    - cancer du poumon
+    - cancer du colon
+    - cancer du côlon
+    sql: EXISTS (SELECT 1 FROM diagnostics d WHERE d.patient = p.id AND d.code_cim10
+      LIKE 'C%' AND d.code_cim10 NOT LIKE 'C50%')
+  gene_x_non_fait:
+    libelle: 'Prélèvement du gène X non réalisé (statut ''non_fait'' : ce n''est pas
+      un négatif)'
+    version: v1
+    source: S1 · gene_x
+    valide_par: Dr. — (à valider)
+    declencheurs:
+    - non fait
+    - non réalisé
+    - non realise
+    - pas prélevé
+    sql: EXISTS (SELECT 1 FROM gene_x gx WHERE gx.patient = p.id AND gx.statut = 'non_fait')

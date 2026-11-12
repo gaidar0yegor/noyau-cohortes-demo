@@ -1,0 +1,10 @@
+services:
+  noyau:
+    build: .
+    ports:
+      - "8099:8099"
+    environment:
+      # mode "regles" par defaut : aucune carte graphique, aucun modele requis
+      PORT: "8099"
+      HOST: "0.0.0.0"
+    restart: unless-stopped

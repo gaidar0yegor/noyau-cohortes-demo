@@ -1,0 +1,15 @@
+{
+ "deepseek-ai/deepseek-v4-flash": {
+  "erreur_sql": 18,
+  "chiffre_la_ou_on_demande": 4,
+  "refus": 15,
+  "chiffre_la_ou_on_refuse": 3
+ },
+ "google/gemma-4-12b": {
+  "chiffre_la_ou_on_demande": 7,
+  "faux_sur_reference": 5,
+  "refus": 18,
+  "chiffre_la_ou_on_refuse": 8,
+  "erreur_sql": 2
+ }
+}
