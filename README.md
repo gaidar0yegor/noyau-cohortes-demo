@@ -54,8 +54,9 @@ bench/       scripts de mesure et résultats bruts
 
 - `questions/QUESTIONS-MEDECINS.md` — quarante questions écrites par un profil utilisateur (oncologue,
   épidémiologiste, attaché de recherche clinique, data manager, cadre), classées par ce qui doit y répondre.
-- `questions/questions_medecins.json` — journal réel : **5 chiffres, 8 demandes de précision, 27 refus,
-  0 erreur interne**.
+- `questions/questions_medecins.json` — journal réel du carnet, dans ses deux états : **4 chiffres
+  vérifiés, 9 demandes de précision, 27 refus** (celui du tag `note-2026-11-12`, donc de la note), puis
+  **26 refus + 1 réponse de conversation** après l'ajout de la couche conversationnelle.
 - `bench/bench_ladder.py` — échelle de concurrence sur une H100, contextes de 8 k uniques.
   Résultat brut : `bench/ladder.raw` (24 sessions, TTFT p95 347 ms, 0 erreur).
 - `bench/bench_extract.py` — extraction de 200 comptes rendus en JSON contraint par schéma.
