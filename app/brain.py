@@ -548,6 +548,9 @@ def _ensemble(question: str) -> set[str] | None:
         plan = traduire(question)
         if valider(plan):
             return None
+        # pour une moyenne, compiler() rend AVG(...) et non des identifiants : on force un plan de comptage,
+        # sinon on comparerait des ensembles faux et on croirait les définitions équivalentes
+        plan["intent"] = "count"
         sql, params = compiler(plan)
         con = connect()
         ids = {r[0] for r in con.execute(sql.replace("COUNT(*) AS n", "p.id AS n"), params).fetchall()}
@@ -686,10 +689,23 @@ def compiler(plan: dict) -> tuple[str, list]:
 # ----------------------------------------------------------------------------------------------
 
 def binom_two_sided(k: int, n: int, p0: float) -> float:
-    def pmf(i):
-        return math.comb(n, i) * (p0 ** i) * ((1 - p0) ** (n - i))
-    obs = pmf(k)
-    return min(1.0, sum(pmf(i) for i in range(n + 1) if pmf(i) <= obs + 1e-15))
+    """Test binomial exact, calculé en logarithme : sur une cohorte de quelques milliers de patientes,
+    `math.comb(n, i) * p**i` dépasse la capacité du float et lève OverflowError."""
+    if n == 0:
+        return 1.0
+    log_p0, log_q0 = math.log(p0), math.log1p(-p0)
+    lg_n = math.lgamma(n + 1)
+
+    def log_pmf(i: int) -> float:
+        return lg_n - math.lgamma(i + 1) - math.lgamma(n - i + 1) + i * log_p0 + (n - i) * log_q0
+
+    obs = log_pmf(k)
+    total = 0.0
+    for i in range(n + 1):
+        lp = log_pmf(i)
+        if lp <= obs + 1e-12:
+            total += math.exp(lp)
+    return min(1.0, total)
 
 
 def verifier(text: str, autorises: set[float]) -> tuple[bool, list[str]]:
@@ -707,7 +723,7 @@ def verifier(text: str, autorises: set[float]) -> tuple[bool, list[str]]:
 # ----------------------------------------------------------------------------------------------
 
 def repondre(question: str, role: str = "chercheur", halluciner: bool = False,
-             mode: str = "regles") -> dict:
+             mode: str = "regles", plan_force: dict | None = None) -> dict:
     t0 = time.perf_counter()
     amb = [a for a in ambiguites(question) if not a.get("equivalent")]
     if amb:
@@ -716,7 +732,12 @@ def repondre(question: str, role: str = "chercheur", halluciner: bool = False,
         return {"statut": "clarification", "message": amb[0]["question"],
                 "options": amb[0]["options"], "ms": round((time.perf_counter() - t0) * 1000, 1)}
 
-    if mode == "llm":
+    if plan_force is not None:
+        plan = dict(plan_force)
+        # reprise de conversation : l'objet porte la question d'origine, on ne la perd pas
+        plan["_question"] = plan_force.get("_question") or question
+        erreurs = valider(plan)
+    elif mode == "llm":
         plan = traduire_llm(question)
         erreurs = valider(plan)
     elif mode == "double":
@@ -770,7 +791,7 @@ def repondre(question: str, role: str = "chercheur", halluciner: bool = False,
         return {"statut": "refus", "raison": [msg], "plan": plan, "message": msg,
                 "ms": round((time.perf_counter() - t0) * 1000, 1)}
 
-    injustifies = justifier(plan, question)
+    injustifies = justifier(plan, plan.get("_question") or question)
     if injustifies:
         msg = ("Le plan ajoute un filtre que votre question ne justifie pas : « "
                + " », « ".join(injustifies) + " ». Je ne réponds pas à une question que vous n'avez "

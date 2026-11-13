@@ -10,6 +10,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 import brain
+import chat
 
 EXEMPLES = [
     "combien de patientes ont un cancer du sein confirmé entre 25 et 36 ans, sans grossesse antérieure ?",
@@ -136,11 +137,10 @@ async function ask(override) {
   lastQ = q;
   if (override) document.getElementById('q').value = q;
   const r = await fetch('/api/ask', {method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({q, role: document.getElementById('role').value,
+      body: JSON.stringify({q, sid: window.__sid, role: document.getElementById('role').value,
                             halluciner: document.getElementById('hall').checked,
                             mode: document.getElementById('mode').value})});
-  const d = await r.json();
-  render(d); loadJournal();
+  const d = await r.json(); window.__sid = d.sid || window.__sid; render(d); loadJournal();
 
 async function loadCatalogue() {
   const r = await fetch('/api/catalogue'); const cat = await r.json();
@@ -185,6 +185,18 @@ function render(d) {
   if (d.options) {
     h += '<div style="margin-top:6px"><small class="hint">Deux définitions existent — à vous de trancher :</small><br>';
     d.options.forEach((o, i) => { h += '<span class="opt" data-suf="' + esc(o.suffixe) + '">' + esc(o.label) + '</span>'; });
+    h += '</div>';
+  }
+  if (d.cohorte_courante) {
+    h += '<div class="meta"><span>cohorte courante : ' + d.cohorte_courante.n + ' patientes — '
+       + esc(d.cohorte_courante.label) + '</span></div>';
+  }
+  if (d.suggestions && d.suggestions.length) {
+    h += '<h3>Je peux répondre à ceci à la place</h3><div>';
+    d.suggestions.forEach(x => {
+      h += '<div class="def" style="cursor:pointer" onclick="document.getElementById(\'q\').value=this.dataset.q;ask()" data-q="'
+         + esc(x) + '">→ ' + esc(x) + '</div>';
+    });
     h += '</div>';
   }
   if (d.suite && d.suite.length) {
@@ -288,8 +300,9 @@ class Handler(BaseHTTPRequestHandler):
         n = int(self.headers.get("Content-Length", 0))
         payload = json.loads(self.rfile.read(n) or b"{}")
         try:
-            res = brain.repondre(payload.get("q", ""), payload.get("role", "chercheur"),
-                                 bool(payload.get("halluciner")), payload.get("mode", "regles"))
+            res = chat.traiter(payload.get("q", ""), payload.get("role", "chercheur"),
+                               bool(payload.get("halluciner")), payload.get("mode", "regles"),
+                               payload.get("sid") or "")
         except Exception as e:                                   # noqa: BLE001
             res = {"statut": "rejete", "message": f"Erreur interne : {type(e).__name__}", "ms": 0}
         self._send(200, json.dumps(res, ensure_ascii=False).encode(), "application/json")
@@ -301,8 +314,5 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     if not brain.DB.exists():
         brain.build_db()
-    import os
-    hote = os.environ.get("HOST", "127.0.0.1")
-    port = int(os.environ.get("PORT", "8099"))
-    print(f"http://{hote}:{port}")
-    ThreadingHTTPServer((hote, port), Handler).serve_forever()
+    print("http://127.0.0.1:8099")
+    ThreadingHTTPServer(("127.0.0.1", 8099), Handler).serve_forever()
