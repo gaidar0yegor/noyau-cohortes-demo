@@ -32,6 +32,10 @@ cd app && pip install pyyaml && python3 app.py
 
 ## Ce que la démonstration montre
 
+> Le **16** final suppose deux choix successifs : définition **confirmée** (sans elle, 51) et âge
+> **aujourd'hui** (à la date du diagnostic, ce serait 29). Le système pose les deux questions ; il ne
+> tranche aucune des deux.
+
 | Question | Ce qui se passe |
 |---|---|
 | « Combien de patientes ont un cancer du sein entre 25 et 36 ans, sans grossesse antérieure ? » | le système exécute les deux définitions du catalogue et affiche **16 ou 51**, puis demande |
