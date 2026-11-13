@@ -821,9 +821,10 @@ def repondre(question: str, role: str = "chercheur", halluciner: bool = False,
         entry.update({"statut": "refus_effectif"})
         log(entry)
         return {"statut": "refus", "n": n, "plan": plan, "sql": sql, "params": params,
-                "message": f"n = {n}. En dessous du seuil de {SEUIL_N}, une réponse chiffrée désignerait "
-                           f"des personnes : je m'arrête là et je le signale. On peut élargir la tranche "
-                           f"d'âge, retirer un critère — mais c'est votre décision, pas la mienne.",
+                "message": (f"Moins de {SEUIL_N} patientes correspondent à cette définition. À ce niveau, "
+                            "donner le chiffre reviendrait à désigner des personnes : je m'arrête là et je le "
+                            "signale. On peut élargir la tranche d'âge ou retirer un critère — mais c'est "
+                            "votre décision, pas la mienne."),
                 "ms": round((time.perf_counter() - t0) * 1000, 1)}
 
     def fr(x: float, nd: int = 1) -> str:
@@ -859,7 +860,7 @@ def repondre(question: str, role: str = "chercheur", halluciner: bool = False,
             autorises_p = p_txt
         texte = (f"{pos} patientes sur {n} expriment le gène X ({100 * pos / n:.0f} %), contre "
                  f"{REF_FREQ * 100:.0f} % attendus dans la cohorte de référence. "
-                 f"{p_txt} — n = {n} : signal à investiguer, non conclusif.")
+                 f"{p_txt} — n = {n}{', effectif faible' if n < 20 else ''} : signal à investiguer, non conclusif.")
         resultat.update({"positives": pos, "frequence_pct": round(100 * pos / n), "p_value": round(pval, 3)})
 
     if halluciner:                       # bouton « simuler une hallucination »

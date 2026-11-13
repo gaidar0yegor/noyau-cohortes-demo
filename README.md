@@ -7,6 +7,11 @@ plutôt qu'un choix silencieux**.
 > **Données 100 % synthétiques.** 3 000 patientes générées avec une graine fixe (`build_db()` dans
 > `app/brain.py`). Aucune donnée patient, aucune donnée réelle, aucune donnée de client.
 
+> **Versions.** La note envoyée le 12/11 correspond au tag `note-2026-11-12` (carnet : 4 chiffres
+> vérifiés, 9 demandes de précision, **27 refus**). Depuis : mesure du 4 B comme traducteur
+> (`bench/translator_4b.json`) et couche conversationnelle (`app/chat.py`, journal à 26 refus + 1 réponse
+> de conversation). Le tag est la référence si un chiffre doit être rapproché du document.
+
 ## Lancer en une commande
 
 ```bash

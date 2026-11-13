@@ -312,7 +312,11 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    import os
+
     if not brain.DB.exists():
         brain.build_db()
-    print("http://127.0.0.1:8099")
-    ThreadingHTTPServer(("127.0.0.1", 8099), Handler).serve_forever()
+    hote = os.environ.get("HOST", "127.0.0.1")
+    port = int(os.environ.get("PORT", "8099"))
+    print(f"http://{hote}:{port}")
+    ThreadingHTTPServer((hote, port), Handler).serve_forever()
