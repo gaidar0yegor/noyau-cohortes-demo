@@ -15,10 +15,33 @@ plutôt qu'un choix silencieux**.
 ## Lancer en une commande
 
 ```bash
+./demo.sh
+```
+
+Cette seule commande construit l'image, démarre le démonstrateur sur <http://localhost:8090>, attend qu'il
+réponde, **rejoue les 40 questions du carnet** et écrit le journal de l'exécution dans
+`questions/run40-<horodatage>.log` (lisible) et `.json` (machine). Sortie non nulle si un statut diffère du
+carnet : c'est la non-régression, vérifiable sans nous croire.
+
+Variantes : `./demo.sh up` (démarrage seul), `./demo.sh run40` (rejeu seul), `./demo.sh down`.
+
+Si Docker n'est accessible qu'avec `sudo` (socket appartenant à root, proxy en façade), `demo.sh` préfixe
+tout seul — inutile de retenir la commande exacte.
+
+Le démonstrateur seul :
+
+```bash
 docker compose up
 ```
 
 Puis ouvrir <http://localhost:8090>. (Le port d'écoute interne reste 8099 ; 8090 côté hôte évite les collisions.)
+
+Rejeu des 40 questions contre une instance déjà démarrée :
+
+```bash
+python3 run40.py                        # http://localhost:8090
+python3 run40.py --base http://localhost:8099 --strict
+```
 
 Aucune carte graphique n'est nécessaire : le démonstrateur tourne en mode **règles** (traducteur
 déterministe + catalogue sémantique). Le mode « LLM » existe mais reste optionnel — il interroge un serveur
@@ -52,9 +75,17 @@ employées avec leur version et leur validateur, et une suite proposée.
 
 ```
 app/         démonstrateur (stdlib + PyYAML), base synthétique, catalogue sémantique
-questions/   les 40 questions du carnet, et leur journal d'exécution
+questions/   les 40 questions du carnet, leur journal d'exécution et les logs de rejeu
 bench/       scripts de mesure et résultats bruts
+run40.py     rejeu des 40 questions contre le démonstrateur, avec journal dans questions/
+demo.sh      la commande unique : construction, démarrage, rejeu, log
 ```
+
+- `run40.py` — envoie les 40 questions à `/api/ask` en mode règles, compare le statut obtenu à celui du
+  carnet, écrit `questions/run40-<horodatage>.log` et `.json`. `--strict` rend une sortie non nulle au
+  premier écart : utilisable en CI, ou par un relecteur qui veut vérifier plutôt que nous croire.
+- `questions/run40-*.log` — exécutions conservées dans le dépôt (une ligne par question : statut, effectif,
+  latence, puis un résumé chiffré). La plus récente fait foi.
 
 - `questions/QUESTIONS-MEDECINS.md` — quarante questions écrites par un profil utilisateur (oncologue,
   épidémiologiste, attaché de recherche clinique, data manager, cadre), classées par ce qui doit y répondre.
@@ -101,14 +132,6 @@ Le code de ce dépôt est un démonstrateur de méthode : il n'est pas destiné 
 # reconstruire la base synthétique
 cd app && python3 -c "import brain; brain.build_db()"
 
-# rejouer le carnet sur la chaîne
-python3 - <<'PY'
-import json, urllib.request, pathlib
-bank = json.loads(pathlib.Path("questions/questions_medecins.json").read_text())
-for q in bank[:5]:
-    r = urllib.request.Request("http://localhost:8090/api/ask",
-        data=json.dumps({"q": q["q"], "role": "chercheur", "mode": "regles"}).encode(),
-        headers={"Content-Type": "application/json"})
-    print(json.loads(urllib.request.urlopen(r).read())["statut"], q["q"][:60])
-PY
+# rejouer les 40 questions (journal dans questions/, sortie non nulle au premier écart)
+python3 run40.py --base http://localhost:8090 --strict
 ```

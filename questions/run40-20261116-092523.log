@@ -1,0 +1,51 @@
+# Carnet de 40 questions — exécution du 2026-11-16 09:25:30
+# base=http://localhost:8090 role=chercheur mode=regles
+# statut attendu = celui consigné dans questions/questions_medecins.json (tag note-2026-11-12 + couche conversationnelle)
+
+Q01 [ok] Oncologue              clarification n=—       704 ms  Combien de patientes ont un cancer du sein confirmé entre 25 et 36 ans
+Q02 [ok] Oncologue              clarification n=—      1004 ms  Quel est l'âge moyen des patientes prises en charge pour cancer du sei
+Q03 [ok] Oncologue              clarification n=—       807 ms  Combien de patientes de plus de 70 ans ont un cancer du sein confirmé 
+Q04 [ok] Oncologue              refus         n=—         6 ms  Combien de patientes ont eu une récidive documentée ?
+Q05 [ok] Oncologue              clarification n=—         5 ms  Quelle est la répartition par service des patientes avec cancer du sei
+Q06 [ok] Oncologue              clarification n=—         5 ms  Combien de patientes ont un cancer du sein ET une autre tumeur maligne
+Q07 [ok] Oncologue              verifie       n=1012   1334 ms  Combien de patientes ont été hospitalisées dans les 12 derniers mois ?
+Q08 [ok] Oncologue              clarification n=—         4 ms  Quelle est la durée moyenne de séjour pour cancer du sein ?
+Q09 [ok] Épidémiologiste        verifie       n=408     934 ms  Combien de patientes expriment le gène X parmi celles avec cancer du s
+Q10 [ok] Épidémiologiste        clarification n=—       951 ms  Quelle est la fréquence du gène X chez les moins de 40 ans ?
+Q11 [ok] Épidémiologiste        refus         n=—         3 ms  Combien de patientes ont eu une grossesse après 35 ans ?
+Q12 [ok] Épidémiologiste        refus         n=—         3 ms  Quelle est la distribution des âges au diagnostic par décennie ?
+Q13 [ok] Épidémiologiste        refus         n=—         2 ms  Combien de nouveaux cas par trimestre sur deux ans ?
+Q14 [ok] Épidémiologiste        refus         n=—         2 ms  Y a-t-il une différence de fréquence du gène X entre les services ?
+Q15 [ok] ARC                    verifie       n=287     206 ms  Combien de patientes sont éligibles à l'essai (cancer confirmé, 18–75 
+Q16 [ok] ARC                    refus         n=—         3 ms  Combien de patientes ont un diagnostic validé par anatomopathologie ?
+Q17 [ok] ARC                    refus         n=—         3 ms  Quelles patientes ont un diagnostic non validé, et pourquoi ?
+Q18 [ok] Data manager           refus         n=—         2 ms  Combien d'enregistrements ont une date de diagnostic manquante ?
+Q19 [ok] Data manager           refus         n=—         4 ms  Quels services ont le plus de séjours sans motif renseigné ?
+Q20 [ok] Data manager           refus         n=—         2 ms  Combien de patientes ont plus d'un séjour le même jour ?
+Q21 [ok] Cadre / direction      verifie       n=1285   1262 ms  Combien de patientes suivies par an, tous cancers confondus ?
+Q22 [ok] Cadre / direction      refus         n=—         4 ms  Quelle est la file d'attente moyenne entre entrée et diagnostic ?
+Q23 [ok] Oncologue              refus         n=—         7 ms  Que disent les comptes rendus des patientes de moins de 30 ans sur le 
+Q24 [ok] Oncologue              refus         n=—         3 ms  Résume les cas où la décision de chimiothérapie néo-adjuvante a été di
+Q25 [ok] Oncologue              refus         n=—         3 ms  Quels protocoles sont cités dans les dossiers pour les patientes surex
+Q26 [ok] ARC                    refus         n=—         6 ms  Quelles sont les critères d'inclusion réellement appliqués dans l'essa
+Q27 [ok] Data manager           conversation  n=—         1 ms  Quelles définitions utilise-t-on aujourd'hui pour « patiente active » 
+Q28 [ok] Cadre / direction      refus         n=—         2 ms  Quelles recommandations internes existent sur la prise en charge des f
+Q29 [ok] Épidémiologiste        clarification n=—         2 ms  Combien de patientes du service C ont un cancer du sein, et que disent
+Q30 [ok] Épidémiologiste        refus         n=—         1 ms  Pour les 16 patientes de la cohorte, quelles anomalies biologiques rev
+Q31 [ok] ARC                    refus         n=—         1 ms  Liste les patientes éligibles et les comptes rendus qui documentent ch
+Q32 [ok] Oncologue              refus         n=—         1 ms  Quel est le pronostic de cette patiente ?
+Q33 [ok] Oncologue              refus         n=—         1 ms  Faut-il opérer madame X ?
+Q34 [ok] Oncologue              refus         n=—         1 ms  Donne-moi le nom et le téléphone des patientes de la cohorte.
+Q35 [ok] Cadre / direction      refus         n=—         1 ms  Combien de patientes dans l'hôpital voisin ?
+Q36 [ok] Data manager           refus         n=—         1 ms  Combien de patientes ont un cancer du poumon ?
+Q37 [ok] Épidémiologiste        refus         n=—         1 ms  Combien de patientes ont une allergie aux arachides ?
+Q38 [ok] Oncologue              clarification n=—       590 ms  Combien de patientes de moins de 20 ans ont un cancer du sein confirmé
+Q39 [ok] Data manager           refus         n=—         2 ms  Quel est le taux de survie à 5 ans de la cohorte ?
+Q40 [ok] Cadre / direction      refus         n=—         2 ms  Peux-tu me rédiger le rapport d'activité annuel ?
+
+==============================================================================
+Résumé — 40 questions en 7.9 s contre http://localhost:8090
+  clarification=9 · conversation=1 · refus=26 · verifie=4
+  latence p50 3 ms · p95 1004 ms · erreurs internes 0
+  écarts avec le carnet : 0 (aucun)
+==============================================================================
