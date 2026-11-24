@@ -38,7 +38,7 @@ attendre() {
 
 case "${1:-demo}" in
   up)
-    "${DOCKER[@]}" compose up -d --build
+    "${DOCKER[@]}" compose up -d --build --force-recreate
     attendre
     echo "Démonstrateur prêt : http://localhost:${PORT_HOTE}/"
     ;;
@@ -53,7 +53,7 @@ case "${1:-demo}" in
     "${DOCKER[@]}" compose logs --tail 40
     ;;
   demo)
-    "${DOCKER[@]}" compose up -d --build
+    "${DOCKER[@]}" compose up -d --build --force-recreate
     attendre
     echo "Démonstrateur prêt : http://localhost:${PORT_HOTE}/"
     echo "Rejeu des 40 questions du carnet…"
