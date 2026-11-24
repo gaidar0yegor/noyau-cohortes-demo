@@ -258,6 +258,37 @@ def charger_catalogue(chemin: Path | None = None) -> dict:
 
 SEMANTIQUE = charger_catalogue()
 
+
+def _version_catalogue(fichier: Path | None = None) -> str:
+    """Version du catalogue, lue dans le fichier — pas dans le code."""
+    f = fichier or (HERE / "semantique.yml")
+    try:
+        import yaml
+        data = yaml.safe_load(f.read_text(encoding="utf-8")) or {}
+        return str(data.get("version_catalogue") or "inconnue")
+    except Exception:                                     # noqa: BLE001
+        return "inconnue"
+
+
+CATALOGUE_VERSION = _version_catalogue()
+
+
+def _empreinte(obj) -> str:
+    """Empreinte courte et stable d'un objet JSON-sérialisable."""
+    import hashlib
+    blob = json.dumps(obj, ensure_ascii=False, sort_keys=True, default=str).encode()
+    return hashlib.sha256(blob).hexdigest()[:16]
+
+
+def _empreinte_bd() -> str:
+    """Empreinte du fichier de données : deux réponses sur deux bases différentes ne sont pas comparables."""
+    import hashlib
+    try:
+        return hashlib.sha256(DB.read_bytes()).hexdigest()[:16]
+    except Exception:                                     # noqa: BLE001
+        return "na"
+
+
 # ----------------------------------------------------------------------------------------------
 # 3. Traducteur : question → plan. Règles explicites, pas de modèle ici (c'est le principe)
 # ----------------------------------------------------------------------------------------------
@@ -888,7 +919,7 @@ def repondre(question: str, role: str = "chercheur", halluciner: bool = False,
               "exporter les effectifs pour revue clinique"]
 
     return {"statut": "verifie", "plan": plan, "sql": sql, "params": params, "resultat": resultat,
-            "message": texte, "suite": suite[:3],
+            "empreinte": _empreinte(resultat), "message": texte, "suite": suite[:3],
             "definitions": {f.replace("NOT ", ""): SEMANTIQUE[f.replace("NOT ", "")]
                             for f in plan["filters"]},
             "date_reference": TODAY.isoformat(), "seuil": SEUIL_N,
@@ -896,6 +927,22 @@ def repondre(question: str, role: str = "chercheur", halluciner: bool = False,
 
 
 def log(entry: dict) -> None:
+    """Journal : toute réponse porte de quoi la rejouer et de quoi la contester.
+
+    Trois empreintes, parce qu'une réponse ne veut rien dire sans son contexte :
+      - empreinte_resultat : ce qui a été calculé, grain fin (tout changement la fait bouger) ;
+      - version_catalogue  : quelles définitions étaient en vigueur ;
+      - empreinte_bd       : sur quelles données (deux bases différentes ne se comparent pas).
+    """
+    entry.setdefault("version_catalogue", CATALOGUE_VERSION)
+    entry.setdefault("empreinte_bd", _empreinte_bd())
+    plan = entry.get("plan") or {}
+    concepts = [f.replace("NOT ", "") for f in (plan.get("filters") or [])]
+    if concepts:
+        entry.setdefault("versions_concepts", {c: (SEMANTIQUE.get(c) or {}).get("version", "—")
+                                               for c in concepts})
+    if "resultat" in entry and "empreinte_resultat" not in entry:
+        entry["empreinte_resultat"] = _empreinte(entry["resultat"])
     with JOURNAL.open("a", encoding="utf-8") as f:
         f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 

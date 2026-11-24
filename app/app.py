@@ -62,6 +62,8 @@ button.ghost { background:#eef2f7; color:var(--blue); }
 pre { background:#f6f7f9; border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; overflow-x:auto; white-space:pre-wrap; word-break:break-word; margin:0; }
 .meta { display:flex; gap:18px; flex-wrap:wrap; font-size:12.5px; color:#5b6773; margin-top:10px; }
 .def { font-size:12.5px; margin:0 0 8px; }
+.def[data-fill] { cursor:pointer; }
+.def[data-fill]:hover { color:#0f3d63; text-decoration:underline; }
 .def b { color:var(--blue); }
 table { width:100%; border-collapse:collapse; font-size:12.5px; }
 th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
@@ -194,8 +196,7 @@ function render(d) {
   if (d.suggestions && d.suggestions.length) {
     h += '<h3>Je peux répondre à ceci à la place</h3><div>';
     d.suggestions.forEach(x => {
-      h += '<div class="def" style="cursor:pointer" onclick="document.getElementById(\'q\').value=this.dataset.q;ask()" data-q="'
-         + esc(x) + '">→ ' + esc(x) + '</div>';
+      h += '<div class="def" data-fill="' + esc(x) + '">→ ' + esc(x) + '</div>';
     });
     h += '</div>';
   }
@@ -208,6 +209,7 @@ function render(d) {
     h += '<h3>Pourquoi pas de réponse</h3><pre>' + esc(JSON.stringify(d.raison, null, 1)) + '</pre>';
   }
   window.__lastN = (d.resultat && d.resultat.n !== undefined) ? d.resultat.n : null;
+  window.__lastE = d.empreinte || null;
   const rn = document.getElementById('replaynote');
   if (rn) { rn.style.display = 'none'; }
   document.getElementById('body').innerHTML = h;
@@ -227,7 +229,7 @@ async function loadJournal() {
   document.getElementById('journal').innerHTML = h + '</table>';
 }
 
-document.getElementById('go').onclick = ask;
+document.getElementById('go').onclick = () => ask();   // pas « = ask » : le clic passerait l'événement en paramètre
 
 async function replay() {
   if (!lastQ) { return; }
@@ -237,9 +239,17 @@ async function replay() {
   const d = await r.json();
   const now = (d.resultat && d.resultat.n !== undefined) ? d.resultat.n : null;
   const prev = window.__lastN;
+  const nowE = d.empreinte || null;
+  const prevE = window.__lastE;
   let msg;
   if (now === null || prev === null || prev === undefined) { msg = 'Rejeu effectué.'; }
-  else if (now === prev) { msg = 'Rejoué : ' + now + ' — même question, même chiffre, même requête.'; }
+  else if (prevE && nowE && prevE === nowE) {
+    msg = 'Rejoué : empreinte identique (' + nowE + ') — même question, même résultat, même requête.';
+  }
+  else if (prevE && nowE && prevE !== nowE) {
+    msg = 'Écart détecté : empreinte ' + prevE + ' puis ' + nowE + ' — résultat différent, à investiguer.';
+  }
+  else if (now === prev) { msg = 'Rejoué : ' + now + ' — même question, même chiffre.'; }
   else { msg = 'Écart détecté : ' + prev + ' puis ' + now + ' — à investiguer.'; }
   const el = document.getElementById('replaynote');
   el.style.display = 'block';
@@ -247,6 +257,13 @@ async function replay() {
 }
 document.getElementById('replay').onclick = replay;
 document.getElementById('q').addEventListener('keydown', e => { if (e.key === 'Enter') ask(); });
+// délégation : une seule écoute pour toutes les suggestions rendues (pas d'onclick inline)
+document.addEventListener('click', e => {
+  const el = e.target.closest('.def[data-fill]');
+  if (!el) { return; }
+  document.getElementById('q').value = el.dataset.fill;
+  ask();
+});
 loadJournal();
 
 async function loadCatalogue() {
