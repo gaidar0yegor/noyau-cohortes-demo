@@ -288,7 +288,11 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
-        self.wfile.write(body)
+        try:
+            self.wfile.write(body)
+        except (BrokenPipeError, ConnectionResetError):
+            # le client a fermé l'onglet pendant la réponse : ce n'est pas une erreur du serveur
+            return
 
     def do_GET(self):
         if self.path.startswith("/api/catalogue"):
